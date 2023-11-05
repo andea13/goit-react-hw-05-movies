@@ -32,7 +32,7 @@ const MoviesPage = () => {
           setIsLoading(false);
         });
     }
-  }, [input, page]);
+  }, [input, page, setSearchParams]);
 
   useEffect(() => {
     setInput(searchParams.get('input'));
