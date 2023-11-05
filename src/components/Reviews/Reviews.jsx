@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchReviewsByMovieId } from 'service/utils';
+const Loader = lazy(() => import('../Loader/Loader'));
 
 const Reviews = () => {
   const [reviews, setReviews] = useState(null);
@@ -9,14 +11,17 @@ const Reviews = () => {
   const { movieId } = useParams();
 
   useEffect(() => {
+    setIsLoading(true);
     if (!movieId) return;
     fetchReviewsByMovieId(movieId).then(res => {
       setReviews(res.results);
+      setIsLoading(false);
     });
   }, [movieId]);
 
   return (
     <>
+      <Suspense>{isLoading === true && <Loader />}</Suspense>
       {reviews && !isLoading && (
         <ul>
           {reviews.map(review => (

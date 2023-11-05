@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { fetchMoviesById } from 'service/utils';
 import { Link, useParams, useLocation, Outlet } from 'react-router-dom';
-import Loader from 'components/Loader/Loader';
+const Loader = lazy(() => import('../components/Loader/Loader'));
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
@@ -11,9 +11,11 @@ const MovieDetailsPage = () => {
 
   const [moviesFound, setMoviesFound] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [setError] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true);
+
     if (movieId) {
       setIsLoading(true);
       fetchMoviesById(movieId)
@@ -22,12 +24,13 @@ const MovieDetailsPage = () => {
         })
         .catch(err => {
           setError(err.message);
+          console.log(error);
         })
         .finally(() => {
           setIsLoading(false);
         });
     }
-  }, [movieId]);
+  }, [movieId, error]);
 
   const getYear = date => {
     if (date) {
@@ -56,7 +59,7 @@ const MovieDetailsPage = () => {
   return (
     <main>
       <section>
-        {isLoading && <Loader />}
+        <Suspense>{isLoading && <Loader />}</Suspense>
         {!isLoading && moviesFound && (
           <>
             <Link to={refToGoBack} className="return_button">
