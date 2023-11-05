@@ -1,8 +1,7 @@
 import { MoviesList } from 'components/MoviesList/MoviesList';
-import React, { useState, useEffect } from 'react';
-import Loader from 'components/Loader/Loader';
-
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { fetchTrendingMovies } from 'service/utils';
+const Loader = lazy(() => import('../components//Loader/Loader'));
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
@@ -23,7 +22,7 @@ const HomePage = () => {
     <main>
       <section>
         <h1>Trending today</h1>
-        {isLoading && <Loader />}
+        <Suspense>{isLoading && <Loader />}</Suspense>
         <MoviesList moviesFound={movies} />
       </section>
     </main>

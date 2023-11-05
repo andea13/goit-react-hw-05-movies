@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fetchMoviesByQuery } from 'service/utils';
-import { MoviesList } from 'components/MoviesList/MoviesList';
+const MoviesList = lazy(() => import('../components/MoviesList/MoviesList'));
 
 const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -60,8 +60,9 @@ const MoviesPage = () => {
 
         {isLoading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
-
-        <MoviesList moviesFound={moviesFound} />
+        <Suspense>
+          <MoviesList moviesFound={moviesFound} />
+        </Suspense>
         {moviesFound.length > 0 && !isLoading && !error && (
           <button onClick={onNextPage}>Load More</button>
         )}

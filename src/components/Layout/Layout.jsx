@@ -1,11 +1,14 @@
-import Header from 'components/Header/Header';
+import { Suspense, lazy } from 'react';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+const Header = lazy(() => import('../Header/Header'));
 
 const Layout = () => {
   return (
     <>
-      <Header />
+      <Suspense>
+        <Header />
+      </Suspense>
       <Outlet />
     </>
   );
