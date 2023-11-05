@@ -1,6 +1,6 @@
-import { MoviesList } from 'components/MoviesList/MoviesList';
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { fetchTrendingMovies } from 'service/utils';
+import MoviesList from 'components/MoviesList/MoviesList';
 const Loader = lazy(() => import('../components//Loader/Loader'));
 
 const HomePage = () => {
