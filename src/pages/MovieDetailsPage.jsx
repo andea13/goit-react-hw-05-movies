@@ -7,7 +7,9 @@ const MovieDetailsPage = () => {
   const { movieId } = useParams();
 
   const location = useLocation();
-  const refToGoBack = location?.state?.from || '/';
+  console.log(location);
+  const refToGoBack = location?.state?.from || '/movies';
+  console.log(refToGoBack);
 
   const [moviesFound, setMoviesFound] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -90,16 +92,37 @@ const MovieDetailsPage = () => {
                   {moviesFound.title || moviesFound.name},{' '}
                   {getYear(moviesFound.release_date)}
                 </h1>
-                <p>User Score: {getPercentage(moviesFound.vote_average)}</p>
+                {moviesFound.vote_average && (
+                  <p>User Score: {getPercentage(moviesFound.vote_average)}</p>
+                )}
+
+                {!moviesFound.vote_average && (
+                  <p>The movie has not been rated yet.</p>
+                )}
+
                 <h2>Overview</h2>
-                <p>{moviesFound.overview}</p>
+                {moviesFound.overview && <p>{moviesFound.overview}</p>}
+                {!moviesFound.overview && (
+                  <p>This movie has not got any overview yet.</p>
+                )}
+
                 <h2>Genres</h2>
-                <p>{getGenresList(moviesFound.genres)}</p>
+                {moviesFound.genres && (
+                  <p>{getGenresList(moviesFound.genres)}</p>
+                )}
+
+                {moviesFound.genres && moviesFound.genres.length === 0 && (
+                  <p>The movie has not been associated with any genre yet.</p>
+                )}
               </div>
             </div>
             <p>Additional information: </p>
-            <Link to="cast">Cast</Link>
-            <Link to="reviews">Reviews</Link>
+            <Link to="cast" state={{ from: location }}>
+              Cast
+            </Link>
+            <Link to="reviews" state={{ from: location }}>
+              Reviews
+            </Link>
 
             <Suspense>
               <Outlet />

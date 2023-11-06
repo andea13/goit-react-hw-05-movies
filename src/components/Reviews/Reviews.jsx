@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { lazy, Suspense } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { fetchReviewsByMovieId } from 'service/utils';
 const Loader = lazy(() => import('../Loader/Loader'));
 
@@ -9,6 +9,8 @@ const Reviews = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { movieId } = useParams();
+  const location = useLocation();
+  const refToGoBack = location?.state?.from || `/movies/${movieId}`;
 
   useEffect(() => {
     setIsLoading(true);
@@ -26,7 +28,9 @@ const Reviews = () => {
         <ul>
           {reviews.map(review => (
             <li key={review.id}>
-              {review.content || review.author_details.content}
+              <Link to={refToGoBack}>
+                {review.content || review.author_details.content}
+              </Link>
             </li>
           ))}
         </ul>

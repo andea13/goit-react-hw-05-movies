@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { lazy, Suspense } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { fetchCastsByMovieId } from 'service/utils';
 const Loader = lazy(() => import('../Loader/Loader'));
 
@@ -9,6 +9,9 @@ const Cast = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { movieId } = useParams();
+
+  const location = useLocation();
+  const refToGoBack = location?.state?.from || `/movies/${movieId}`;
 
   useEffect(() => {
     setIsLoading(true);
@@ -33,11 +36,17 @@ const Cast = () => {
         <ul>
           {casts.map(cast => (
             <li key={cast.id}>
-              <img src={createImageUrl(cast.profile_path)} alt={cast.name} />
-              <h3>{cast.name}</h3>
+              <Link to={refToGoBack} state={{ from: location }}>
+                <img src={createImageUrl(cast.profile_path)} alt={cast.name} />
+                <h3>{cast.name}</h3>
+              </Link>
             </li>
           ))}
         </ul>
+      )}
+
+      {casts && casts.length === 0 && (
+        <p>We do not have any information about the cast in this movie</p>
       )}
     </>
   );
