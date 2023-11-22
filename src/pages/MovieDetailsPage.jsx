@@ -8,7 +8,8 @@ const MovieDetailsPage = () => {
 
   const location = useLocation();
   console.log(location);
-  const refToGoBack = location?.state?.from || '/movies';
+
+  const refToGoBack = location?.state?.from || `/movies`;
   console.log(refToGoBack);
 
   const [moviesFound, setMoviesFound] = useState(null);
@@ -17,6 +18,8 @@ const MovieDetailsPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
+    // console.log(query);
 
     if (movieId) {
       setIsLoading(true);
@@ -64,9 +67,17 @@ const MovieDetailsPage = () => {
         <Suspense>{isLoading && <Loader />}</Suspense>
         {!isLoading && moviesFound && (
           <>
+            {/* {moviesFound.backdrop_path ||
+              moviesFound.poster_path ||
+              moviesFound.title ||
+              moviesFound.name ||
+              moviesFound.vote_average ||
+              moviesFound.vote_average ||
+              (moviesFound.overview && ( */}
             <Link to={refToGoBack} className="return_button">
               Go back
             </Link>
+
             <div className="section_container">
               <div className="image_container">
                 {moviesFound.backdrop_path && (
@@ -117,6 +128,7 @@ const MovieDetailsPage = () => {
               </div>
             </div>
             <p>Additional information: </p>
+
             <Link to="cast" state={{ from: location }}>
               Cast
             </Link>

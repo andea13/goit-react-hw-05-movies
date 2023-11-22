@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 const MoviesList = ({ moviesFound }) => {
   console.log(moviesFound);
   const location = useLocation();
+
   return (
     <ul>
       {moviesFound.map(movie => (

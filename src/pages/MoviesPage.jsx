@@ -19,6 +19,8 @@ const MoviesPage = () => {
     }
     if (input) {
       setSearchParams({ input });
+      const query = searchParams.get('query');
+      console.log(query);
       setIsLoading(true);
       fetchMoviesByQuery(input, page)
         .then(res => {
@@ -42,6 +44,9 @@ const MoviesPage = () => {
     e.preventDefault();
 
     setInput(e.target.elements.searchQuery.value.toLowerCase());
+    setSearchParams({
+      query: e.target.elements.searchQuery.value.toLowerCase(),
+    });
   };
 
   const onNextPage = () => {
@@ -61,7 +66,7 @@ const MoviesPage = () => {
         {isLoading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
         <Suspense>
-          <MoviesList moviesFound={moviesFound} />
+          <MoviesList moviesFound={moviesFound} searchParams={searchParams} />
         </Suspense>
         {moviesFound.length > 0 && !isLoading && !error && (
           <button onClick={onNextPage}>Load More</button>
