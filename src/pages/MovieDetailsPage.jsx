@@ -1,6 +1,13 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { fetchMoviesById } from 'service/utils';
-import { Link, useParams, useLocation, Outlet } from 'react-router-dom';
+import {
+  Link,
+  useParams,
+  useLocation,
+  Outlet,
+  useSearchParams,
+  useNavigate,
+} from 'react-router-dom';
 const Loader = lazy(() => import('../components/Loader/Loader'));
 
 const MovieDetailsPage = () => {
@@ -9,7 +16,9 @@ const MovieDetailsPage = () => {
   const location = useLocation();
   console.log(location);
 
-  const refToGoBack = location?.state?.from || `/movies`;
+  const [searchParams] = useSearchParams();
+
+  const refToGoBack = location?.state?.from || ` `;
   console.log(refToGoBack);
 
   const [moviesFound, setMoviesFound] = useState(null);
@@ -18,8 +27,6 @@ const MovieDetailsPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-
-    // console.log(query);
 
     if (movieId) {
       setIsLoading(true);
@@ -78,6 +85,15 @@ const MovieDetailsPage = () => {
               Go back
             </Link>
 
+            {/* <button
+              onClick={() =>
+                navigate(refToGoBack.pathname, { state: { from: location } })
+              }
+              className="return_button"
+            >
+              Go back
+            </button> */}
+
             <div className="section_container">
               <div className="image_container">
                 {moviesFound.backdrop_path && (
@@ -132,7 +148,14 @@ const MovieDetailsPage = () => {
             <Link to="cast" state={{ from: location }}>
               Cast
             </Link>
-            <Link to="reviews" state={{ from: location }}>
+            <Link
+              to={{
+                pathname: 'reviews',
+                search: location.search, // Append existing query parameters
+                state: { from: location },
+              }}
+              // state={{ from: location }}
+            >
               Reviews
             </Link>
 
