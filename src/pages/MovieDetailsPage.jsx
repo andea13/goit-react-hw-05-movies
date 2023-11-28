@@ -1,13 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { fetchMoviesById } from 'service/utils';
-import {
-  Link,
-  useParams,
-  useLocation,
-  Outlet,
-  useSearchParams,
-  useNavigate,
-} from 'react-router-dom';
+import { Link, useParams, useLocation, Outlet } from 'react-router-dom';
 const Loader = lazy(() => import('../components/Loader/Loader'));
 
 const MovieDetailsPage = () => {
@@ -16,9 +9,7 @@ const MovieDetailsPage = () => {
   const location = useLocation();
   console.log(location);
 
-  const [searchParams] = useSearchParams();
-
-  const refToGoBack = location?.state?.from || ` `;
+  const refToGoBack = '/movies?input=' + localStorage.getItem('query');
   console.log(refToGoBack);
 
   const [moviesFound, setMoviesFound] = useState(null);
@@ -74,25 +65,11 @@ const MovieDetailsPage = () => {
         <Suspense>{isLoading && <Loader />}</Suspense>
         {!isLoading && moviesFound && (
           <>
-            {/* {moviesFound.backdrop_path ||
-              moviesFound.poster_path ||
-              moviesFound.title ||
-              moviesFound.name ||
-              moviesFound.vote_average ||
-              moviesFound.vote_average ||
-              (moviesFound.overview && ( */}
-            <Link to={refToGoBack} className="return_button">
-              Go back
-            </Link>
-
-            {/* <button
-              onClick={() =>
-                navigate(refToGoBack.pathname, { state: { from: location } })
-              }
-              className="return_button"
-            >
-              Go back
-            </button> */}
+            {
+              <Link to={refToGoBack} className="return_button">
+                Go back
+              </Link>
+            }
 
             <div className="section_container">
               <div className="image_container">
@@ -148,14 +125,7 @@ const MovieDetailsPage = () => {
             <Link to="cast" state={{ from: location }}>
               Cast
             </Link>
-            <Link
-              to={{
-                pathname: 'reviews',
-                search: location.search, // Append existing query parameters
-                state: { from: location },
-              }}
-              // state={{ from: location }}
-            >
+            <Link to="reviews" state={{ from: location }}>
               Reviews
             </Link>
 

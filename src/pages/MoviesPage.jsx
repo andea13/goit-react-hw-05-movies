@@ -12,6 +12,13 @@ const MoviesPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let query = localStorage.getItem('query');
+    if (query) {
+      setInput(query);
+    }
+  }, []);
+
+  useEffect(() => {
     setError(null);
 
     if (!input) {
@@ -19,8 +26,7 @@ const MoviesPage = () => {
     }
     if (input) {
       setSearchParams({ input });
-      const query = searchParams.get('query');
-      console.log(query);
+      localStorage.setItem('query', input);
       setIsLoading(true);
       fetchMoviesByQuery(input, page)
         .then(res => {
