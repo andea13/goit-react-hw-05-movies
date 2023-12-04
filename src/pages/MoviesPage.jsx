@@ -5,28 +5,27 @@ const MoviesList = lazy(() => import('../components/MoviesList/MoviesList'));
 
 const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [input, setInput] = useState('');
   const [moviesFound, setMoviesFound] = useState([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    let query = localStorage.getItem('query');
-    if (query) {
-      setInput(query);
-    }
-  }, []);
+  const handleSubmit = e => {
+    e.preventDefault();
+    setSearchParams({
+      query: e.target.elements.searchQuery.value.toLowerCase(),
+    });
+    setMoviesFound([]);
+  };
+
+  const input = searchParams.get('query');
 
   useEffect(() => {
-    setError(null);
-
     if (!input) {
+      setError(null);
       setMoviesFound([]);
     }
     if (input) {
-      setSearchParams({ input });
-      localStorage.setItem('query', input);
       setIsLoading(true);
       fetchMoviesByQuery(input, page)
         .then(res => {
@@ -40,20 +39,7 @@ const MoviesPage = () => {
           setIsLoading(false);
         });
     }
-  }, [input, page, setSearchParams]);
-
-  useEffect(() => {
-    setInput(searchParams.get('input'));
-  }, [searchParams]);
-
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    setInput(e.target.elements.searchQuery.value.toLowerCase());
-    setSearchParams({
-      query: e.target.elements.searchQuery.value.toLowerCase(),
-    });
-  };
+  }, [input, page]);
 
   const onNextPage = () => {
     setPage(prevPage => prevPage + 1);

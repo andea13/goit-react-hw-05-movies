@@ -7,10 +7,8 @@ const MovieDetailsPage = () => {
   const { movieId } = useParams();
 
   const location = useLocation();
-  console.log(location);
 
-  const refToGoBack = '/movies?input=' + localStorage.getItem('query');
-  console.log(refToGoBack);
+  const refToGoBack = location.state?.from ?? '/';
 
   const [moviesFound, setMoviesFound] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -122,10 +120,10 @@ const MovieDetailsPage = () => {
             </div>
             <p>Additional information: </p>
 
-            <Link to="cast" state={{ from: location }}>
+            <Link to="cast" state={{ from: refToGoBack }}>
               Cast
             </Link>
-            <Link to="reviews" state={{ from: location }}>
+            <Link to="reviews" state={{ from: refToGoBack }}>
               Reviews
             </Link>
 

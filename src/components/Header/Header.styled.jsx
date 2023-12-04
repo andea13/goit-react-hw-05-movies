@@ -18,6 +18,4 @@ export const HeaderWrapper = styled.header`
 export const HeaderList = styled.ul`
   list-style: none;
   display: flex;
-
-  list-style: none;
 `;
